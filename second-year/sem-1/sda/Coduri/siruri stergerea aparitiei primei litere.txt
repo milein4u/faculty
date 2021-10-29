@@ -1,0 +1,24 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+void functie(char a[20])
+{
+    int i;
+    char c;
+        c=a[0];
+    for(i=0;i<strlen(a);i++)
+      {if (c==a[i])
+         strcpy(a+i, a+i+1);
+      }
+printf("Cuvantul dupa eliminarea aparitiei primei litere este %s.", a );
+}
+
+int main()
+{char a[20];
+ printf("Dati cuvantul: ");
+ scanf("%s", &a);
+functie(a);
+    return 0;
+}
+

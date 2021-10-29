@@ -1,0 +1,87 @@
+#include <stdio.h>  //input-output
+#include <stdlib.h> 
+#include <string.h> //functiile cu striguri (comparatie, copy, ...)
+#include <ctype.h> // isalpha(); isdigit();
+
+typedef struct {
+    char denumire[51];
+    char descriere[256];
+}Minerale;
+
+Minerale *minerale = NULL;
+int NR_MINERALE = 0;
+
+FILE *fis;
+
+
+//codul pentru cautare binara
+int NR_COMP=0;
+int bSearchRecursiv(Minerale* arr, int start, int end, char *element){
+    if(end >= start){
+        int middle = start + (end - start) / 2;
+        if(strcmpi(arr[middle].denumire, element) == 0){
+            NR_COMP++;
+            return middle;
+        }
+        if( strcmpi(arr[middle].denumire, element) > 0)
+        {
+            NR_COMP++;
+            return bSearchRecursiv(arr, start, middle-1, element);
+        }
+        return bSearchRecursiv(arr, middle+1, end, element);
+    }
+    return -1;
+}
+
+int main(){
+
+
+    if( (fis = fopen("MineralsAlphabeticalList.txt", "r")) == NULL ){
+        printf("error open file");
+        exit(EXIT_FAILURE);
+    }
+
+    Minerale *v2;
+
+    if( ( minerale = (Minerale*)malloc((NR_MINERALE+1)*sizeof(Minerale))) == NULL ){
+        printf("error");
+        fclose(fis);
+        exit(EXIT_FAILURE);
+    }
+
+
+        while( fscanf(fis, "%s %[^\n]s", minerale[NR_MINERALE].denumire, minerale[NR_MINERALE].descriere) == 2 ){
+            NR_MINERALE++;
+            v2 = (Minerale*) realloc(minerale, (NR_MINERALE + 1)*sizeof(Minerale));
+            if(!v2){
+                printf("error");
+                free(minerale);
+                fclose(fis);
+                exit(EXIT_FAILURE);
+            }
+            minerale = v2;
+    }
+
+    //apelare cautarii binare
+    char *key = "ONYX";
+    int index = bSearchRecursiv(minerale, 0, NR_MINERALE-1, key);
+    if(index == -1){
+        printf("ti loh");
+    }else{
+        printf("%s \n", minerale[index].descriere);
+    }
+
+    //afisare nr comparatii in cautare binara
+    printf("numarul de comparatii: %d\n", NR_COMP);
+
+    //cautare liniara
+    for(int i=0; i<NR_MINERALE; i++){
+        if(minerale[i].denumire[0] == 'K'){
+            printf("%s\n", minerale[i].denumire);
+        }
+    }
+
+    fclose(fis);
+    free(minerale);
+    return 0;
+}

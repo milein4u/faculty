@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<FileVersion major="1" minor="0" />
+	<ActiveTarget name="Debug" />
+	<File name="Cautare-ocupatie-cod.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1554" topLine="66" />
+		</Cursor>
+	</File>
+	<File name="Liste-Mesaje.c" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3968" topLine="75" />
+		</Cursor>
+	</File>
+	<File name="Back-CalculeazaNr.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1376" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Back-nVocaleMici.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="700" topLine="10" />
+		</Cursor>
+	</File>
+	<File name="Sortari-Sel-Bubble-elevi.c" open="1" top="1" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1558" topLine="56" />
+		</Cursor>
+	</File>
+	<File name="Back-DifAbs2.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="983" topLine="28" />
+		</Cursor>
+	</File>
+	<File name="Cautare-elevi-optionale.c" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="840" topLine="22" />
+		</Cursor>
+	</File>
+	<File name="Liste-Magazin.c" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3970" topLine="111" />
+		</Cursor>
+	</File>
+	<File name="Liste-Muncitori.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2056" topLine="75" />
+		</Cursor>
+	</File>
+	<File name="Liste-EleviProfesori.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3513" topLine="113" />
+		</Cursor>
+	</File>
+	<File name="Back-Palindrom.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="682" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="Studenti.txt" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="149315" topLine="9958" />
+		</Cursor>
+	</File>
+	<File name="Liste-FilmRezervare.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1239" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="Back-DescompunereNrConsecutive.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1357" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Back-Permutare.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1343" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="Liste-ProfesoriStudenti.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="933" topLine="23" />
+		</Cursor>
+	</File>
+	<File name="Back-Cub.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2200" topLine="73" />
+		</Cursor>
+	</File>
+	<File name="Liste-Functie2in2.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="596" topLine="22" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

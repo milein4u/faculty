@@ -1,0 +1,26 @@
+/*Se citesc doua cuvinte a si b formate din cel mult 20 de litere fiecare.
+Afisati toate sufixele cuvantului a care au proprietatea ca sunt prefixe ale cuvantului b.
+Daca nu exista astfel de sufixe afisati mesajul "nu exista".  */
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{char a[20], b[20];
+ int k=0;
+ int i;
+ printf("Dati cuvintele a si b:\n");
+ scanf("%s", &a);
+ scanf("%s", &b);
+ printf("Sufixele lui a care sunt prefixe ale lui b sunt: ");
+ for(i=0;i<strlen(a);i++)
+    if(strstr(b,a+i)==b)
+        {
+            printf("%s ", a+i);
+            k=1;
+        }
+    if(!k) printf("nu exista");
+    return 0;
+}
+

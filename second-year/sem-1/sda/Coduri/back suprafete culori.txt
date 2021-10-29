@@ -1,0 +1,146 @@
+/*
+O suprafata caroiata de dimensiune NxN este caracterizata prin faptul ca fiecare celula are o anumita culoare.
+Doua sau mai multe celule alaturare (pe linie sau pe coloana, nu si pe diagonala)
+de aceeasi culoare vor da nastere unei suprafete conexe avand aceeasi culoare.
+Sa se scrie intr-un limbaj de programare concret un progr. care citeste datele necesare de la tastatura,
+le stocheaza in structuri de date corespunzatoare si apoi 
+
+gaseste suprafata conexa maxima de aceeasi culoare,
+tiparind dimensiunea acesteia in numar de celule, precum si culoarea sa.
+
+Algoritmul de cautare se cere sa fie unul recursiv.
+Se va descrie in cuvinte rostul fiecarei structuri de date folosite.
+*/
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#define ALB 1
+#define NEGRU 2
+#define ROSU 3
+#define GALBEN 4
+
+int nrMax ;
+int max[100] ; 
+int n;
+int tab[100][100];
+int drum[100][100];
+int x[] = {-1,  0,  0, 1};
+int y[] = {0 , -1, 1, 0 };
+
+void afiseaza();
+void citeste()
+{
+	FILE *fin = fopen("input.txt","rt");
+	
+	fscanf(fin, "%d", &n);
+	printf(" %d\n",n);
+
+	int i;
+	int j;
+	for(i=1; i<=n ; i++)
+	{
+		for(j=1; j<=n; j++)
+			fscanf(fin,"%d", &tab[i][j]);
+	}
+
+	for(i=1; i<=n; i++)
+	{
+		printf("\n");
+		for(j=1; j<=n; j++)
+			printf(" %d", tab[i][j]);
+	}
+	printf("\n");
+}
+
+void back(int culoare, int lin, int col)
+{
+	int i;
+	int j;
+	printf("\n pozitia %d %d", lin, col);
+	drum[lin][col] = culoare ;
+	afiseaza();
+
+	for(i=0; i<4; i++)
+	{
+		if ( (drum[lin+x[i]][col+y[i]] == 0 )&&( tab[lin+x[i]][col+y[i]]!=0 ) )
+			if( tab[lin+x[i]][col+y[i]] == culoare )
+			{
+				back(culoare,lin+x[i],col+y[i]);
+				drum[lin+x[i]][col+y[i]] = 0;
+			}
+	}
+
+}
+
+void afiseaza()
+{
+	nrMax = 0 ;
+	printf("\n");
+	int i, j;
+	for(i=1; i<=n; i++)
+	{
+		printf("\n");
+		for(j=1; j<=n; j++)
+		{
+			printf("%d ",drum[i][j]);
+			if(drum[i][j])
+				nrMax++;
+		}
+	}
+}
+
+void reset()
+{
+	int i,j;
+	for(i=1; i<=n; i++)
+		for(j=1; j<=n; j++)
+			drum[i][j]=0;
+
+	nrMax = 0 ;
+}
+
+int main()
+{
+	citeste();
+
+	freopen("output.txt","wt",stdout);
+
+	int culoare ;
+	for(culoare = 1 ; culoare <=4 ; culoare ++)
+	{
+	
+		int lin, col;
+		int i,j;
+		for(i=1; i<=n ; i++)
+			for(j=1; j<=n; j++)
+				if(tab[i][j] == culoare)
+				{
+					lin = i;
+					col = j;
+					reset();
+					printf("\n\n -------- linie coloana %d %d -----------------------", lin, col);
+					back(culoare, lin, col);
+					if(max[culoare] <= nrMax)
+						max[culoare] = nrMax ;
+					printf("\ncontor: %d ", max[culoare]);
+				}
+	}
+
+	nrMax = 0;
+	int i,c;
+	for(i=1; i<=4; i++)
+	{
+		if(max[i] > nrMax)
+		{
+			c=i;
+			nrMax = max[i];
+		}
+	}
+
+	printf("\nculoare %d pozitii %d", c , nrMax); 
+
+	printf("\n\n");
+	//system("pause");
+	return 0;
+}

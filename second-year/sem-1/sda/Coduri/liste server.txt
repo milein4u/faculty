@@ -1,0 +1,266 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+typedef struct Client
+{
+	char nume[30];
+	int prioritate;
+	Client *next ;
+}Client;
+
+typedef struct Clasa
+{
+	char nume[30];
+	int count ;
+	Client* prim;
+	Clasa * next ;
+}Clasa;
+
+typedef struct Server
+{
+	Clasa * prim;
+	
+}Server;
+
+Server server;
+
+Client* extrage_client2(char *nume);
+void initializare()
+{
+	printf("\nam initializat");
+	server.prim = NULL ;
+}
+
+void adaugare_client( char *nume, char *clasa, int prioritate )
+{
+	printf("\nadaugare client");
+	//creez clientul
+	Client *cl;
+		cl = (Client*) malloc(sizeof(Client));
+		strcpy(cl->nume, nume);
+		cl->next = NULL ;
+		cl->prioritate = prioritate ;
+
+	Clasa *i;
+	Clasa *cls = NULL ;
+	
+
+	//caut clasa
+	if( server.prim != NULL)
+	{
+		i = server.prim;
+		while(i != NULL )
+		{
+			if( !strcmp(i->nume,clasa))
+			{
+				cls = i;
+			}
+			i = i->next;
+		}
+	}
+	else
+	{
+		printf("\nserver gol");
+	}
+	
+	//nu exista clasa, o creez
+	if( cls == NULL)
+	{
+		cls = (Clasa*) malloc(sizeof(Clasa));
+		strcpy(cls->nume, clasa);
+		cls->next=NULL;
+		cls->count=0;
+		cls->prim = cl; //client
+		(cls->count)++;
+		
+		if( server.prim == NULL)
+		{
+			server.prim = cls ;
+			cls->next = NULL ;
+		}
+		else
+		{
+			cls->next= server.prim;
+			server.prim = cls;
+		}
+	}
+	else
+	{
+		Client* c;
+		Client* prev;
+		
+		for(c = cls->prim, prev=c; (c!=NULL) && (cl->prioritate < c->prioritate); prev=c, c=c->next);
+
+		if(prev==c)
+		{
+			cl->next = cls->prim;
+			cls->prim = cl;
+			(cls->count)++;
+		}
+		else
+		{
+			cl->next = c;
+			prev->next = cl;
+			(cls->count)++;
+		}
+
+	}
+}
+
+void actualizare_client(char *nume, char* clasaNoua, int prioritateNoua)
+{
+	Client *cl = extrage_client2(nume);
+	if( cl != NULL)
+		adaugare_client(cl->nume, clasaNoua, 3);
+	else
+		printf("\nClient inexistent");
+}
+
+Client* extrage_client()
+{
+	Clasa *cls, *clsprev, *aux2;
+	int max = 0;
+
+	for(cls=server.prim, clsprev=cls; cls!=NULL; clsprev=cls, cls=cls->next)
+	{
+		if(cls->count > max)
+		{
+			max = cls->count ;
+			aux2 = cls ;
+		}
+	}
+
+	printf("\n clasa max %s", aux2->nume);
+	
+	
+	Client* cl = aux2 ->prim ;
+	aux2->prim = cl->next ;
+	printf("\n clientul extras %s", cl->nume); 
+	(aux2->count)--;
+	//elimina clasele vide
+	aux2 = NULL ;
+	for(cls=server.prim, clsprev=cls; cls!=NULL; clsprev = cls, cls=cls->next)
+	{
+		if( cls->count == 0 )
+		{
+			aux2 = cls;
+			if( cls == clsprev)
+			{
+				server.prim = cls->next;
+			}
+			else
+			{
+				clsprev->next = cls->next ;
+			}
+		}
+	}
+	
+	if(aux2 !=NULL)
+		free(aux2);
+
+	return cl ;
+}
+
+Client* extrage_client2(char *nume)
+{
+	Clasa *cls,*clsprev;
+	Client *ci, *cprev;
+	Client *aux = NULL;
+
+	//cauta clienti
+	for(cls=server.prim, clsprev=cls; cls!=NULL; clsprev = cls, cls=cls->next)
+	{
+		for(ci=cls->prim, cprev=ci; ci!=NULL; cprev=ci, ci=ci->next)
+		{
+			if(!strcmp(ci->nume, nume))
+			{
+				aux = ci;
+				printf("\ngasit!   %s", ci->nume);
+				if(cprev==ci)
+				{
+					cls->prim = ci->next ;
+				}
+				else
+				{
+					
+					cprev->next = ci->next ;
+				}
+				(cls->count)--;
+			}
+		}
+	}
+	
+	Clasa* aux2 = NULL ;
+	//elimina clasele vide
+	for(cls=server.prim, clsprev=cls; cls!=NULL; clsprev = cls, cls=cls->next)
+	{
+		if( cls->count == 0 )
+		{
+			aux2 = cls;
+			if( cls == clsprev)
+			{
+				server.prim = cls->next;
+			}
+			else
+			{
+				clsprev->next = cls->next ;
+			}
+		}
+	}
+	free(aux2);
+
+	if(aux != NULL )
+		return aux ;
+	else
+		return NULL ;
+}
+
+void listare()
+{
+	printf("\n");
+	Clasa * ci;
+	Client *cl ;
+
+	for( ci=server.prim; ci!= NULL; ci = ci->next)
+	{
+		printf("\n%s: %d clienti", ci->nume, ci->count);
+		for(cl=ci->prim; cl!=NULL; cl = cl->next)
+		{
+			printf("\n\t%s %d", cl->nume, cl->prioritate);
+		}
+	}
+}
+
+int main()
+{
+	initializare();
+
+	adaugare_client("Ion","A", 1);
+	adaugare_client("Vasile","B", 2);
+	adaugare_client("Ionica","A", 3);
+	adaugare_client("Vasilica","C", 10);
+	adaugare_client("David","A", 23);
+	adaugare_client("Paul", "A", 4);
+
+
+	listare();
+	Client* cl ;
+	cl = extrage_client();
+
+	
+	
+	listare();
+	//cl= extrage_client2("Ionica");
+	actualizare_client("Paula", "D", 3);
+	actualizare_client("Paul", "B", 25);
+	listare();
+	cl = extrage_client();
+	listare();
+	cl = extrage_client();
+	listare();
+
+	printf("\n\n");
+	system("pause");
+	return 0;
+}

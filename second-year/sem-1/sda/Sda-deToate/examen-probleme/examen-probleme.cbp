@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="examen-probleme" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/examen-probleme" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/examen-probleme" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../t2/COR_Descrescator.txt" />
+		<Unit filename="Back-CalculeazaNr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back-Cub.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back-DescompunereNrConsecutive.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back-DifAbs2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back-Palindrom.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back-Permutare.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back-nVocaleMici.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Cautare-elevi-optionale.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Cautare-ocupatie-cod.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-AdaugaInceput.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-EleviProfesori.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-FilmRezervare.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-Functie2in2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-Magazin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-Mesaje.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-Muncitori.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Liste-ProfesoriStudenti.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sortari-Sel-Bubble-elevi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Studenti.txt" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,65 @@
+ #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char name[35];
+    int year, bonus;
+}employee;
+
+void move(employee e[], int n) {
+    int i,aux,k=0;
+    for(i=0;i<n;i++) {
+        if(e[i].bonus == 1) {
+            aux=e[i].bonus;
+            e[i].bonus=e[k].bonus;
+            e[k].bonus=aux;
+            k++;
+        }
+    }
+}
+
+void sort(employee e[], int n) {
+    int i,j;
+    char aux[35];
+    for(i=0;i<n;i++) {
+        for(j=n-1;j>i;j--){
+            if(strcmp(e[j-1].name,e[j].name)<0) {
+                strcpy(aux, e[j-1].name);
+                strcpy(e[j-1].name, e[j].name);
+                strcpy(e[j].name,aux);
+            }
+        }
+    }
+}
+
+void citire(employee e[], int n) {
+    int i;
+    printf("Introduceti: nume bonus(0/1)\n");
+    for(i=0; i<n; i++) {
+        scanf("%s %d", e[i].name, &e[i].bonus);
+    }
+}
+
+void afisare(employee e[], int n) {
+    int i;
+    for(i=0; i<n; i++) {
+        printf("(%s,%d) ", e[i].name,e[i].bonus);
+    }
+    printf("\n");
+}
+
+int main()
+{
+    int n;
+    printf("n:");
+    scanf("%d", &n);
+    employee *e=malloc(sizeof(n));
+
+    citire(e,n);
+    afisare(e,n);
+    sort(e,n);
+    afisare(e,n);
+    free(e);
+    return 0;
+}

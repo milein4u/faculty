@@ -1,0 +1,292 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+typedef struct Rezervare
+{
+	char nume[30] ;
+	int locuri ;
+	Rezervare * nextR ;
+}Rezervare ;
+
+typedef struct Hotel
+{
+	char nume[30];
+	int locuri ;
+	int count ;
+	Rezervare* primR;
+	Hotel *nextH ;
+}Hotel ;
+
+typedef struct Categorie
+{
+	int categorie ;
+	Rezervare * primR ;
+	Hotel *primH ;
+	Categorie *nextC ;
+}Categorie ;
+
+typedef struct 
+{
+	Categorie * primC ;
+}Sistem ;
+Sistem sistem ;
+void afisare();
+void adaugare_hotel(char *nume, int categorie, int locuri);
+void listare(int categorie);
+
+void initializare()
+{
+	printf("\n\tinitializare");
+	
+	Categorie* ct[5];
+	int i;
+	for(i = 0; i<5; i++)
+	{
+		ct[i] = (Categorie*)malloc(sizeof(Categorie));
+		ct[i]->nextC = NULL ;
+		ct[i]->primR = NULL ;
+		ct[i]->primH = NULL ;
+		ct[i]->categorie = i+1 ;
+	}
+
+	sistem.primC = ct[0] ;
+
+	for(i=1; i<5; i++)
+	{
+		ct[i]->nextC = sistem.primC ;
+		sistem.primC = ct[i] ;
+	}
+
+}
+
+
+
+void adaugare_hotel(char *nume, int categorie, int locuri)
+{
+	//creare hotel
+	Hotel *ht = (Hotel*)malloc(sizeof(Hotel));
+	ht->locuri = locuri ;
+	ht->nextH = NULL ;
+	ht->count = 0;
+	ht->primR = NULL ;
+	strcpy(ht->nume, nume);
+	
+	//localizare categorie
+	Categorie* i;
+	for(i=sistem.primC ; i!=NULL && ( i->categorie != categorie); i= i->nextC);
+
+	if( i == NULL)
+		printf("\nCategorie inexistenta!");
+	else
+	{
+		ht->nextH = i->primH;
+		i->primH = ht ;
+	}
+}
+
+char* rezervare(char* nume, int locuri, int categorie)
+{
+	//cauta categoria
+	Categorie *ct ;
+	for(ct=sistem.primC; (ct!=NULL)&&( ct->categorie != categorie ); ct= ct->nextC);
+	
+	//cauta hotel
+	Hotel *ht ;
+	for(ht=ct->primH; (ht!=NULL)&&(( ht->locuri - ht->count) < locuri); ht=ht->nextH);
+	
+	//creaza rezervare
+	Rezervare *re = (Rezervare*)malloc(sizeof(Rezervare));
+	re ->locuri = locuri;
+	strcpy(re->nume, nume);
+	re->nextR =NULL;
+
+	if( ht!=NULL)
+	{
+
+		printf("\nExista loc!");
+		if(ht->primR == NULL)
+		{
+			ht->primR = re ;
+			ht->count += re->locuri ;
+		}
+		else
+		{
+			Rezervare *i;
+			for(i=ht->primR; i->nextR != NULL; i = i->nextR);
+			i->nextR = re;
+			ht->count += re->locuri ;
+		}
+
+		return ht->nume ;
+	}
+	else
+	{
+		printf("\nNu Exista loc!");
+		if(ct->primR == NULL)
+		{
+			ct->primR = re ;
+		}
+		else
+		{
+			Rezervare *i;
+			for(i=ct->primR; i->nextR != NULL; i = i->nextR);
+			i->nextR = re;
+		}
+		return NULL;
+	}
+
+}
+
+
+void renuntare(char* numeC)
+{
+	Categorie *ct;
+	Hotel* ht;
+
+	Categorie *nct ;
+	Rezervare * auxR = NULL ;
+	Hotel* auxH;
+
+	for(ct=sistem.primC; ct!=NULL; ct=ct->nextC)
+	{
+		Rezervare *re,*prev;
+		for(ht= ct->primH; ht!=NULL; ht=ht->nextH)
+		{
+			for(re = ht->primR, prev=re ; (re!=NULL) ; prev= re, re=re->nextR)
+			{	
+				if(! strcmp(re->nume, numeC) )
+				{
+					if(prev==re)
+					{
+						auxR = re;
+						ht->primR = re->nextR ;
+						ht->count -= re->locuri ;
+					}
+					else
+					{
+						ht->count -= re->locuri ;
+						auxR = re;
+						prev->nextR = re->nextR ;
+					}
+					nct = ct ;
+					auxH = ht ;
+				}
+			}
+		}
+	}
+
+	//afisare();
+	if(auxR != NULL)
+	{
+		printf("\nAnulat: %s", auxR->nume);
+		free(auxR);
+	}
+
+	auxR = nct->primR ;
+	
+	while(auxR!=NULL)
+	{
+		if( ( auxH->locuri - auxH->count) >= auxR->locuri )
+		{
+			Rezervare *rez = auxR ;
+			auxR= auxR->nextR ; 
+			rez->nextR = auxH->primR ; 
+			auxH->primR = rez ;
+			auxH->count += rez->locuri;
+			nct->primR=auxR;
+			
+		}
+		else
+		{
+			auxR = auxR->nextR ;
+		}
+	}
+	
+}
+void listare(int categorie)
+{
+	printf("\n\n\tListare Categorie %d", categorie);
+	Categorie *ct = NULL ;
+	Categorie* i;
+	
+	for(i=sistem.primC ; i!=NULL && (i->categorie!=categorie); i= i->nextC);
+	
+	if( i == NULL)
+	{
+		printf("\nCategorie inexistenta!");
+	}
+
+	ct = i;
+	
+
+	if( ct != NULL )
+	{
+		Hotel *j ;
+		printf("\nHoteluri");
+		for( j=ct->primH ; j!=NULL; j=j->nextH)
+		{
+			printf("\nnume: %s locuri:%d disp:%d", j->nume, j->locuri, j->locuri-j->count);
+			Rezervare * re;
+			for(re=j->primR; re!=NULL; re=re->nextR)
+				printf("\n\t%s %d", re->nume, re->locuri);
+		}
+
+		Rezervare *k;
+		printf("\nRezervari");
+		for(k=ct->primR; k!=NULL; k=k->nextR)
+		{
+			printf("\n%s %d", k->nume, k->locuri);
+		}
+	}
+	
+}
+
+void afisare()
+{
+	printf("\n---------------------------------------------------------");
+	int i;
+	Categorie* ct;
+	for(ct = sistem.primC; ct!=NULL ; ct=ct->nextC )
+	{
+		listare(ct->categorie);
+	}
+	printf("\n---------------------------------------------------------");
+}
+
+int main()
+{
+	initializare();
+	
+	adaugare_hotel("A",1,20);
+	adaugare_hotel("B",1,30);
+	adaugare_hotel("C",2,30);
+	adaugare_hotel("D",1,15);
+
+	char* s;
+	s= rezervare("Ion", 2, 1);
+	s= rezervare("Andrei", 2, 1);
+	s= rezervare("Cristi", 15, 1);
+
+	s= rezervare("Paul", 14, 2);
+	s= rezervare("Sorin", 16, 2);
+	s= rezervare("Sonia", 2, 2);
+	s= rezervare("Cipri", 3, 2);
+	s= rezervare("Cata", 10, 2);
+	
+	
+	//listare(2);
+
+	afisare();
+	
+	renuntare("Paul");
+	//renuntare("Crisit");
+	//renuntare("Cata");
+	//renuntare("Cristi");
+
+	afisare();
+	
+	printf("\n\n");
+	system("pause");
+	return 0;
+}

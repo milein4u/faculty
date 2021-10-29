@@ -1,0 +1,49 @@
+# depslib dependency file v1.0
+1610449542 source:d:\facultate-an2_sem1\sda\examen-probleme\cautare-elevi-optionale.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1610529862 source:d:\facultate-an2_sem1\sda\examen-probleme\cautare-ocupatie-cod.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1610533680 source:d:\facultate-an2_sem1\sda\examen-probleme\sortari-sel-bubble-elevi.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1610529850 source:d:\facultate-an2_sem1\sda\an2cti\an2cti\sda\examen\deserviremesaje.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1610533730 source:d:\facultate-an2_sem1\sda\examen-probleme\liste-muncitori.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1583781384 source:d:\facultate-an2_sem1\sda\an2cti\an2cti\sda\examen\liste\listem\examprobl.c
+	<stdio.h>
+	<stdlib.h>
+
+1610533988 source:d:\facultate-an2_sem1\sda\examen-probleme\liste-filmrezervare.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1610534010 source:d:\facultate-an2_sem1\sda\examen-probleme\liste-functie2in2.c
+	<stdio.h>
+	<stdlib.h>
+
+1610534556 source:d:\facultate-an2_sem1\sda\examen-probleme\liste-eleviprofesori.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1610543312 source:d:\facultate-an2_sem1\sda\examen-probleme\liste-mesaje.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

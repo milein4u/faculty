@@ -1,0 +1,33 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+void elimina_vocale(char a[20])
+{
+    int i;
+    char vocale[]="aeiou";
+    for(i=0;i<strlen(a);i++)
+       {if (strchr(vocale, a[i])!=0)
+            strcpy(a+i, a+i+1);
+       }
+  printf("Cuvantul fara vocale este %s.", a);
+}
+
+void elimina_consoane(char a[20])
+{
+    int i;
+    char vocale[]="aeiou";
+    for(i=0;i<strlen(a);i++)
+       {if (strchr(vocale, a[i])==0)
+            strcpy(a+i, a+i+1);
+       }
+  printf("Cuvantul fara consoane este %s.", a);
+}
+
+int main()
+{char cuvant[30];
+ printf("Dati cuvantul: ");
+ scanf("%s", &cuvant);
+ elimina_vocale(cuvant);
+return 0;
+}

@@ -1,0 +1,221 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+typedef struct Piesa
+{
+	int val ;
+	Piesa *next ;
+}Piesa;
+
+typedef struct Jucator
+{
+	char nume[30];
+	Piesa* prim;
+	Jucator* next;
+}Jucator;
+
+typedef struct Joc
+{
+	Jucator *prim ;
+}Joc;
+
+Joc joc;
+
+void initializare()
+{
+	joc.prim = NULL ;
+}
+
+void adaugare_jucator(char *nume)
+{
+	//creare jucator
+	Jucator * jct = (Jucator*)malloc(sizeof(Jucator));
+	jct->next=NULL;
+	jct->prim=NULL;
+	strcpy(jct->nume, nume);
+
+	Jucator *i;
+	if( joc.prim == NULL)
+	{
+		joc.prim = jct ;
+	}
+	else
+	{
+		jct->next =joc.prim ;
+		joc.prim=jct;
+	}
+}
+
+void retrage_jucator(char *nume)
+{
+	printf("\nretragere jucator");
+	Jucator *jct ;
+	Jucator *i, *prev;
+	for(i=joc.prim, prev=i; (i!=NULL)&& strcmp(i->nume,nume) ; prev=i, i=i->next);
+	jct=i;
+	
+	if( prev==i)
+	{
+		joc.prim = i->next ;
+	}
+	else
+	{
+		prev->next = i->next;
+	}
+	
+	//eliberare piese
+	Piesa *p, *aux;
+	p = jct->prim ;
+	while(p != NULL)
+	{
+		aux = p;
+		p= p->next;
+		free(aux);
+	}
+}
+
+void listeaza_piese(char *nume)
+{
+	//printf("\n\tListeaza piese!");
+	Jucator *jct = NULL ;
+	for(jct=joc.prim; (jct!=NULL) && strcmp(jct->nume,nume); jct=jct->next);
+	if(jct!=NULL)
+	{
+		//printf("\nJucator: %s", jct->nume);
+		Piesa *p ;
+		printf("\n");
+		for(p=jct->prim; p!=NULL; p=p->next)
+			printf("%d ", p->val);
+	}
+	else
+	{
+		printf("\n\tJucator inexistent!");
+	}
+}
+
+void listare_jucatori()
+{
+	printf("\n\tListare jucatori");
+	Jucator *i;
+	for(i=joc.prim; i!=NULL; i=i->next)
+	{
+		printf("\n%s", i->nume);
+		listeaza_piese(i->nume);
+	}
+}
+
+void adaugare_piesa(char *nume, int valoare)
+{
+	//creare piesa
+	Piesa* ps = (Piesa*)malloc(sizeof(Piesa));
+	ps->next = NULL ;
+	ps->val = valoare ;
+
+	printf("\n\tAdaugare piesa!");
+	Jucator *jct = NULL ;
+	for(jct=joc.prim; (jct!=NULL) && strcmp(jct->nume,nume); jct=jct->next);
+	if(jct!=NULL)
+	{
+		Piesa *p = jct->prim ;
+		if( p == NULL)
+		{
+			jct->prim = ps;
+		}
+		else
+		{
+			if( valoare> p->val)
+			{
+				ps->next = p;
+				jct->prim = ps ;
+			}
+			else
+			{
+				Piesa *prev;
+				for(prev= p; (p!=NULL)&&(p->val > valoare); prev=p, p=p->next);
+				if(p==NULL)
+				{
+					prev->next = ps;
+				}
+				else
+				{
+					ps->next = p;
+					prev->next = ps;
+				}
+			}
+		}
+	}
+	else
+	{
+		printf("\n\tJucator inexistent!");
+	}
+}
+
+int depunere_piesa(char *nume)
+{
+	int aux ;
+	Jucator *jct = NULL ;
+	for(jct=joc.prim; (jct!=NULL) && strcmp(jct->nume,nume); jct=jct->next);
+
+	if(jct ==NULL)
+	{
+		printf("\nJucator inexistent!");
+		return NULL ;
+	}
+	else
+	{
+		Piesa *p, *prev;
+
+		for( p=jct->prim, prev=p; p->next!=NULL; prev=p, p=p->next);
+		prev->next = p->next ;
+		aux = p->val;
+		free(p);
+		printf("\n%s depune %d", jct->nume, aux);
+		return aux ;
+	}
+	
+	
+}
+
+int main()
+{
+	
+	initializare();
+	listare_jucatori();
+
+	adaugare_jucator("Ion");
+	//listare_jucatori();
+	adaugare_jucator("Dan");
+	adaugare_jucator("Paul");
+	adaugare_jucator("George");
+	adaugare_jucator("Vasile");
+	listare_jucatori();
+/*
+	retrage_jucator("Ion");
+	retrage_jucator("Vasile");
+	retrage_jucator("Paul");
+	listare_jucatori();
+*/
+	adaugare_piesa("George", 2);
+	adaugare_piesa("Paula",3);
+	adaugare_piesa("George", 4);
+	adaugare_piesa("George", 1);
+	adaugare_piesa("George", 3);
+	
+	adaugare_piesa("Paul", 2);
+	adaugare_piesa("Vasile", 20);
+
+	listeaza_piese("George");
+	listeaza_piese("Paula");
+
+	int a = depunere_piesa("George");
+	a = depunere_piesa("George");
+	listeaza_piese("George");
+	a= depunere_piesa("Paula");
+
+	listare_jucatori();
+	
+	printf("\n\n");
+	system("pause");
+	return 0;
+}

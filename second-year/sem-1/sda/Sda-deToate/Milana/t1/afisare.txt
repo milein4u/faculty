@@ -1,0 +1,2 @@
+Algoritm 512559680 , timp executie 0.000000 
+Algoritm -298632863 , timp executie 79.816002

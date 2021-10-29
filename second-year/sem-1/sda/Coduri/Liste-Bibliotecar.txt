@@ -1,0 +1,160 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int evidenta = 0;
+
+#define maxCap 15
+
+typedef struct biblioteca
+{
+    char titluCarte[maxCap];
+    char autorCarte[maxCap];
+    char numeCititor[maxCap];
+    char adresaCititor[maxCap];
+    int termen;
+    struct biblioteca *urmator;
+
+} biblioteca;
+
+
+int vidare()
+{
+    evidenta++;
+    return evidenta;
+}
+
+
+biblioteca *imprumut_nou(biblioteca *cap, char *titluCarte, char *autorCarte, char *numeCititor, char *adresaCititor, int *termen )
+{
+     biblioteca *iterator = cap;   
+
+    if(iterator == NULL)
+    {
+        biblioteca *aux = (biblioteca*) malloc(sizeof(biblioteca));
+        iterator = aux;
+        strcpy(aux->titluCarte, titluCarte);
+        strcpy(aux->autorCarte, autorCarte);
+        strcpy(aux->numeCititor, numeCititor);
+        strcpy(aux->adresaCititor, adresaCititor);
+        aux->termen = *termen;
+        aux->urmator = NULL; 
+
+        vidare();
+    }
+
+
+    else
+    {
+        biblioteca *aux = (biblioteca*) malloc(sizeof(biblioteca));
+        strcpy(aux->titluCarte, titluCarte);
+        strcpy(aux->autorCarte, autorCarte);
+        strcpy(aux->numeCititor, numeCititor);
+        strcpy(aux->adresaCititor, adresaCititor);
+        aux->termen = *termen;
+        aux->urmator = NULL; 
+
+        vidare();
+
+        while(iterator->urmator != NULL)
+        {
+        
+            if (iterator->numeCititor == numeCititor)
+            {
+                printf("Nu a putut fi adaugat");
+                exit(0);
+            }
+            
+            iterator = iterator->urmator;
+        }
+
+            iterator->urmator = aux;
+}
+    exit(1);
+}
+
+biblioteca  *returnare(biblioteca *cap , char *nume)
+{
+    biblioteca *iterator, *aux;
+
+    if (strcmp(cap->numeCititor, nume) == 0)
+    {
+        iterator = cap;
+        cap = cap->urmator;
+        free(iterator->numeCititor);
+        free(iterator);
+        return iterator;
+    }
+
+    iterator = cap;
+
+    while (iterator != NULL && strcmp(iterator->numeCititor, nume) != 0)
+        iterator = cap->urmator;
+
+    if (iterator != NULL && strcmp(iterator->numeCititor, nume) == 0)
+    {
+        aux = iterator->urmator;
+        iterator->urmator = iterator->urmator->urmator;
+        free(aux->numeCititor);
+        free(aux);
+    }
+    return cap;
+}
+
+void actualizare(biblioteca *cap)
+{
+    biblioteca *iterator = cap;
+
+    while (iterator != NULL)
+    {
+        iterator->termen -= 1;
+        iterator = iterator->urmator;
+    }
+
+    iterator = cap;
+
+    while (iterator != NULL)
+    {
+        if (iterator->termen < 0)
+            printf("\nTitlu Carte:\n%s \nAutor Carte:\n%s \nNume Citior\n%s \nTermenul:%d", iterator->titluCarte, iterator->autorCarte, iterator->numeCititor, iterator->termen);
+
+        iterator = iterator->urmator;
+    }
+}
+
+void afisare(biblioteca *cap)
+{
+    biblioteca *iterator = cap;
+    while (iterator != NULL)
+    {
+        printf("\nTitlu Carte:\n%s \nAutor Carte:\n%s \nNume Citior\n%s \nTermenul:%d", iterator->titluCarte, iterator->autorCarte, iterator->numeCititor, iterator->termen);
+        iterator = iterator->urmator;
+    }
+}
+int main() {
+    biblioteca *cap;
+    cap = NULL;
+
+    char titlu[maxCap];
+    char autor[maxCap];
+    char adresa[maxCap];
+    char nume[maxCap];
+    int termen;
+
+    int i = 0;
+    for(i =0; i<4;i++)
+    {
+        scanf("%s %s %s %s %i",titlu,autor,adresa,nume,&termen);
+        imprumut_nou(cap,titlu,autor,adresa,nume,&termen);
+    }
+        printf("%s\n", cap->titluCarte);
+   actualizare(cap);
+
+    printf("Nume returnare: \n");
+    scanf("%s",nume);
+    returnare(cap,nume);
+
+    afisare(cap);
+
+    return 0;
+}

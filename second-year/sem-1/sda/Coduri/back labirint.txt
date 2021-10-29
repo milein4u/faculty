@@ -1,0 +1,106 @@
+#include <stdio.h>
+#define nmax 5
+typedef struct coordonate
+{
+    int x;
+    int y;
+}coordonate;
+coordonate pos[nmax]; //tabloul de posibilitati
+coordonate a[nmax*nmax];   //tablou de maxim nmax elemente
+int matrice[nmax][nmax] = {
+    { 0, 0, 1, 0, 1 },
+    { 0, 0, 0, 0, 1 },
+    { 1, 1, 0, 0, 1 },
+    { 1, 0, 1, 1, 0 },
+    { 0, 1, 0, 1, 0 } };  //matricea initiala (0=liber)
+void initializare(int n) //int a[] variabila globala
+{
+    int i;
+    for(i=0;i<n;i++)
+    {
+        a[i].x=0;
+        a[i].y=0;
+    }
+    pos[0].x=0;
+    pos[1].x=-1;
+    pos[2].x=0;
+    pos[3].x=1;
+    pos[0].y=1;
+    pos[1].y=0;
+    pos[2].y=-1;
+    pos[3].y=0;
+}
+void afiseaza_solutia(int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+        printf("X=%d Y=%d\n", a[i].x, a[i].y);
+    printf("\n");
+}
+int acceptabil(coordonate pos)
+{
+   if(pos.x>=0&&pos.x<nmax)
+   {
+        if(pos.y>=0&&pos.y<nmax)
+        {
+            if(matrice[pos.x][pos.y]==0)
+            {
+                return 1;
+            }
+        }
+   }
+   return 0;
+}
+int solutie(int k, coordonate c,coordonate c_final)
+{
+    return ((c.x==c_final.x)&&(c.y==c_final.y)&&k);
+}
+void labirint(int k, coordonate c_final)  //k pasul, c coordonata curenta
+{
+    int i;
+    coordonate aux;
+    if (solutie(k, a[k-1],c_final))              //solutie completa (avem n elemente)
+        afiseaza_solutia(k);
+    else
+    {
+        for (i = 0; i < 4; i++)  // parcurgem pe rand posibilitatile
+        {
+            aux.x = a[k-1].x + pos[i].x;
+            aux.y = a[k-1].y + pos[i].y;
+            if (acceptabil(aux))
+            {//daca posibilitatea  e acceptabila
+                a[k] = aux;
+                matrice[a[k].y][a[k].x] = 2; //marcheaza ca vizitat
+                labirint(k + 1,c_final);     // back1(posibilitate_k+1)
+                matrice[a[k].y][a[k].x] = 0; //sterge marcajul ca vizitat
+            }
+        }
+    }
+}   /*labirint*/
+int main(void)
+{
+    int i,j;
+    coordonate c,c2;
+    initializare(nmax);
+    for(i=0;i<nmax;i++)
+    {
+        for(j=0;j<nmax;j++)
+            printf("%d ",matrice[i][j]);
+        printf("\n");
+    }
+    printf("Dati valoarea initiala pt x intre (0 si %d): ", nmax);
+    scanf("%d", &c.x);
+    printf("Dati valoarea initiala pt y intre (0 si %d): ", nmax);
+    scanf("%d", &c.y);
+    printf("Dati valoarea finala pt x intre (0 si %d): ", nmax);
+    scanf("%d", &c2.x);
+    printf("Dati valoarea finala pt y intre (0 si %d): ", nmax);
+    scanf("%d", &c2.y);
+    if (acceptabil(c)&&(acceptabil(c2))) //daca pozitia initala se incadreaza in limitele hartii si este libera
+        matrice[c.y][c.x] = 2;
+    else
+        printf("Coordonate invalide\n");
+    a[0] = c;   //pasul 0 reprezinta originea
+    labirint(1, c2);
+    return 0;
+}

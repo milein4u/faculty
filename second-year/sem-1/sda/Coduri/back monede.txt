@@ -1,0 +1,113 @@
+/* 
+Monede in ordine crescatoare V1,v2,...,vk.
+ni monede de valoare vi.
+Sumele care pot fi platite exact.
+ */
+
+#include<stdlib.h>
+#include<stdio.h>
+int sume[10000];
+int count=0 ;
+
+
+int valori[100];
+int bani[100];
+int sol[100];
+
+int n;
+int s;
+void afisare();
+void citire()
+{
+	
+	FILE *fbani;
+
+
+	fopen_s(&fbani, "bani.txt", "rt");
+
+
+	fscanf(fbani,"%d", &n);
+	printf("\nbancnote: %d", n);
+
+	int i;
+	for(i=1; i<=n; i++)
+	{
+		fscanf(fbani, "%d", &bani[i]);
+		fscanf(fbani, "%d", &valori[i]);
+
+		printf("\n%d %d", bani[i], valori[i]);
+	}
+	printf("\n");
+
+	
+
+	
+	printf("\n\n");
+
+}
+
+int valid( int suma)
+{
+	int i;
+	for(i=1; i<= count; i++)
+		if( sol[i] == suma )
+			return 0;
+	return 1 ;
+}
+
+void solutie(int suma)
+{
+	
+	int i;
+	int flag = 1 ;
+
+	for(i=1; i<=count; i++)
+	{
+		if( suma == sume[i])
+			flag = 0;
+	}
+
+	if(flag)
+	{
+		//printf("\n%d", suma);
+		count++;
+		sume[count] = suma ;
+	}
+	
+}
+
+void rec( int suma )
+{
+	int i;
+	for(i=1; i<=n; i++)
+	{
+		if( sol[i] < bani[i] )
+			{
+				sol[i]++;
+				solutie(suma+valori[i]);
+				rec( suma+valori[i]);
+				sol[i]--;
+			}
+	}
+}
+	
+void afisare()
+{
+	static int crt = 1;
+	printf("\n afisare: %d", crt++);
+	printf("\n");
+	int i;
+	for(i=0; i<=count; i++)
+		printf("\n%d", sume[i]);
+}
+
+int main()
+{
+	citire();
+
+	rec( 0);
+	afisare();
+	printf("\n\n");
+	system("pause");
+	return 0;
+}

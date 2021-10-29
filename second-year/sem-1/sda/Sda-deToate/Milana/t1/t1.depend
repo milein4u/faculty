@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1602599602 source:c:\users\raian\downloads\main.c
+	"timer.h"
+	<stdio.h>
+	<stdlib.h>
+
+1602599633 c:\users\raian\downloads\timer.h
+
+1602600252 source:d:\facultate-an2_sem1\sda\tema1.c
+	<stdio.h>
+	<stdlib.h>
+
