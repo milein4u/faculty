@@ -1,0 +1,137 @@
+/*
+O harta este specifica sub forma unei matrici bidimensionale de NxM numere reale,
+continutul fiecarei celule reprezentand inaltimea punctului respectiv de pe harta.
+Un excursionist pleaca dintr-un punct cunosctu de coordonate x1,y1 si doreste sa ajunga in alt punct cunoscut
+de coordonate x2,y2.
+Drumul trebuie sa contina doar puncte plate sau in coborare.
+Afiseaza toate drumurile posibile de la start la punctul final.
+*/
+
+#include<stdlib.h>
+#include<stdio.h>
+
+int n,m;
+
+int x[] = { -1 , -1, -1, 0, 0, 1, 1, 1 };
+int y[] = { -1, 0, +1,   -1, 1, +1, 0, -1};
+
+typedef struct 
+{
+	int x;
+	int y;
+	int h;
+}punct ;
+
+punct org;
+punct dest;
+
+
+
+int harta[100][100];
+int drum[100][100];
+
+
+void citire()
+{
+	FILE *fin;
+	fopen_s(&fin, "input.txt", "rt");
+	fscanf(fin,"%d", &n);
+	fscanf(fin,"%d", &m);
+
+	printf("\n %d x %d", n, m);
+
+	int i;
+	int j;
+	for(i=1; i<=n; i++)
+	{
+		printf("\n");
+		for(j=1; j<=m; j++)
+		{
+			fscanf(fin,"%d", &harta[i][j]);
+			printf("%d ", harta[i][j]);
+		}
+	}
+
+	org.x = 1;
+	org.y = 2;
+	org.h = harta[org.x][org.y];
+	drum[org.x][org.y]=org.h;
+	dest.x = 3;
+	dest.y = 4;
+
+	printf("\norigine: %d %d inaltime: %d", org.x, org.y, org.h);
+	
+	printf("\ndestinatie: %d %d", dest.x, dest.y);
+	printf("\n\n");
+}
+
+void afisare()
+{
+	static int crt =1 ;
+	printf("\n------------------------\n");
+	printf("\nsolutia: %d\n", crt++);
+	int i; 
+	int j;
+
+	for(i=1; i<=n; i++)
+	{
+		printf("\n");
+		for(j=1; j<=m; j++)
+			printf("%d ", drum[i][j]);
+	}
+}
+
+int valid(int lin, int col, int h)
+{
+	if( lin <1 )
+		return 0;
+	if( col <1 )
+		return 0;
+	if( lin > n )
+		return 0;
+	if( col > m) 
+		return 0;
+	
+	if(  harta[lin][col] > h )
+		return 0; 
+	
+	if( drum[lin][col] )
+		return 0; 
+
+	return 1;
+}
+
+void back( int lin, int col, int h)
+{
+	if(( lin == dest.x)&&( col == dest.y ))
+		afisare();
+	else
+	{
+		int i;
+		for(i=0; i<8; i++)
+		{
+			
+			if ( valid( lin+x[i], col+y[i], h) )
+			{
+				drum[lin+x[i]][ col+y[i]] = harta[lin+x[i]][ col+y[i]];
+				back( lin+x[i],col+y[i] , harta[lin+x[i]][ col+y[i]] );
+				drum[lin+x[i]][ col+y[i]] = 0;
+			}
+			
+		}
+	}
+}
+
+
+int main()
+{
+
+	citire();
+	
+	back(org.x, org.y, org.h);
+
+	printf("\n\n");
+	system("pause");
+	return 0;
+	
+}

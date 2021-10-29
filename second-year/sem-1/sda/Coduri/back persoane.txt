@@ -1,0 +1,133 @@
+/*
+Se cunosc numele a N persoane sub forma unor siruri de caractere.
+Intre persoanele citite exista perechi de persoane care se cunosc si perechi care nu se cunosc.
+Aceste date sunt de asemenea cunoscute si retinute intr-o structura de date specifica.
+Sa se scrie un progr. care citeste datele necesare de la tastatura, le stocheaza in structuri de date corespunzatoare
+si apoi gaseste si afiseaza toate modalitatile de plasare a celor N persoane in jurul unei mese rotunde,
+astfel incat fiecare persoana sa aiba in stanga si in dreapta sa doar persoana cunoscute.
+Algoritmul de plasare se cere sa fie unul recursiv.
+Se va descrie in cuvinte rostul fiecarei structuri de date folosite.
+
+MATRICEA DE RELATII:
+0 1 1 0 1
+1 0 1 0 0
+1 1 0 1 1
+0 0 1 0 1
+1 0 1 1 0
+*/
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+int n;
+int count;
+
+typedef struct persoana
+{
+	char nume[30];
+}persoana;
+
+persoana pers[100];
+int relatii[100][100];
+int pozitie[100];
+
+void citire()
+{
+	FILE *fpers;
+	FILE *frelatii;
+
+	fpers = fopen("persoane.txt","rt");
+	frelatii = fopen("relatii.txt","rt");
+
+	fscanf(fpers,"%d",&n);
+	printf("\npersoane: %d\n", n);
+
+	int i,j;
+	for(i=1; i<=n; i++)
+	{
+		fscanf(fpers,"%s", &pers[i].nume);
+		printf("\n%s", pers[i].nume);
+	}
+
+	printf("\n");
+
+	for(i=1; i<=n ; i++)
+	{
+		printf("\n");
+		for(j=1; j<=n; j++)
+		{
+			fscanf(frelatii,"%d", &relatii[i][j]);
+			printf("%d ", relatii[i][j]);
+		}
+	}
+}
+
+int solutie(int pas)
+{
+	if (pas == n)
+	{
+		int prim = pozitie[1];
+		int ultim = pozitie[pas];
+
+		if(!relatii[prim][ultim])
+			return 0 ;
+	}
+
+	if(pas!=1)
+	{
+		int st = pozitie[pas-1];
+		int dr = pozitie[pas];
+		if( !relatii[st][dr])
+			return 0;
+	}
+
+	return 1 ;
+}
+
+void afisare()
+{
+	printf("\n\n");
+	int i;
+	for(i=1; i<=n; i++)
+		printf("%s ", pers[pozitie[i]].nume);
+}
+
+int valid(int pas)
+{
+	int i;
+	for(i=1; i<pas; i++)
+		if( pozitie[i] == pozitie[pas] )
+			return 0;
+
+	return 1;
+}
+
+void back(int pas)
+{
+	int i ;
+	if(pas == (n+1))
+	{
+		afisare();
+		count++;
+	}
+
+	for(i=1; i<= n; i++)
+	{
+		pozitie[pas] = i;
+		if( valid(pas))
+			if(solutie(pas))
+				back(pas+1);
+	}
+}
+
+int main()
+{
+	citire();
+
+	back(1);
+	printf("\n\nsolutie: %d", count);
+	printf("\n\n");
+	system("pause");
+	return 0;
+}

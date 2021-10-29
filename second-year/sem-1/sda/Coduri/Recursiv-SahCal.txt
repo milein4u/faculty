@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+#define N 8
+#define TMAX 100
+
+int di[8] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+int dj[8] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+int tabla[N][N], traseuI[TMAX], traseuJ[TMAX], nTraseu;
+
+int traseuIMin[TMAX], traseuJMin[TMAX], nTraseuMin = INT_MAX;
+
+void afisare()
+{
+    printf("  ");
+    for (int i = 0; i < N; i++)
+    {
+        printf(" %c ", 'A'+i);
+    }
+    putchar('\n');
+    for (int i = 0; i < N; i++)
+    {
+        printf(" %c", '1'+i);
+        for (int j = 0; j < N; j++)
+        {
+            if (i == 0 && j == 0)   printf(" S ");
+            else    if (i == N-1 && j == N-1)   printf(" F ");
+            else    printf(" %d ", tabla[i][j]);
+        }
+        putchar('\n');
+    }
+}
+
+void solutie()
+{
+    for(int k = 0; k < nTraseu; k++)
+    {
+        traseuIMin[k] = traseuI[k];
+        traseuJMin[k] = traseuJ[k];
+    }
+    nTraseuMin = nTraseu;
+}
+
+void cauta(int i, int j)
+{
+    if (nTraseu == nTraseuMin) return;
+    if (i < 0 || i >= N || j < 0 || j >= N) return;
+    if (tabla[i][j] != 0)   return;
+
+    traseuI[nTraseu] = i;
+    traseuJ[nTraseu] = j;
+    tabla[i][j] = nTraseu;
+    nTraseu++;
+
+    if(i == N-1 && j == N-1)
+    {
+        solutie();
+    }
+    else
+    {
+        int k;
+        for(k = 0; k < 8; k++)
+        {
+            cauta(i+di[k], j+dj[k]);
+        }
+    }
+
+    nTraseu--;
+    tabla[i][j] = 0;
+}
+
+int main()
+{
+    cauta(0, 0);
+    if(nTraseuMin == INT_MAX)
+    {
+        printf("\nNu exista solutii!\n");
+    }
+    else
+    {
+        for(int k = 0; k < nTraseuMin; k++)
+        {
+            tabla[traseuIMin[k]][traseuJMin[k]] = k;
+        }
+        afisare();
+    }
+    return 0;
+}

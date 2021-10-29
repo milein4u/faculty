@@ -1,0 +1,14 @@
+Primul:
+12
+Al doilea: 
+432 
+Al treilea:
+56
+Al patrulea:
+8
+Al cincilea:
+11
+Al saselea:
+18
+Al saptelea:
+24

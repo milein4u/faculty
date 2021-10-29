@@ -1,0 +1,131 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct pacient{
+    char clasa[10],nume[20];
+    int prioritate;
+}pacient;
+typedef struct clasa{
+    char nume[10];
+    pacient pac[20];
+    int nr_pacienti;
+    struct clasa *urm;
+}clasa;
+clasa *rad;
+void adauga_pacient(char cl[],char nume[],int prioritate)
+{
+    clasa* p;
+    pacient aux;
+    strcpy(aux.nume,nume);
+    strcpy(aux.clasa,cl);
+    aux.prioritate=prioritate;
+    int i,j;
+    for(p=rad;p;p=p->urm)
+        if(strcmp(cl,p->nume)==0)
+        {
+            p->pac[p->nr_pacienti]=aux;
+            p->nr_pacienti++;
+        }
+}
+void adauga_clasa(char cl[])
+{
+    clasa *p;
+    clasa *aux=(clasa *)malloc(sizeof(clasa));
+    aux->nr_pacienti=0;
+    aux->urm=NULL;
+    strcpy(aux->nume,cl);
+    if(rad)
+    {
+        for(p=rad;p->urm;p=p->urm);
+        p->urm=aux;
+    }
+    else
+        rad=aux;
+}
+void trateaza_pacient()
+{
+    clasa *p;
+    int i,j,max=0;
+    for(p=rad;p;p=p->urm)
+        if(p->nr_pacienti>max)
+            max=p->nr_pacienti;
+    for(p=rad;p;p=p->urm)
+        if(p->nr_pacienti==max)
+        {
+            max=0;
+            for(i=0;i<p->nr_pacienti;i++)
+                if(p->pac[i].prioritate>max)
+                    max=p->pac[i].prioritate;
+            for(i=0;i<p->nr_pacienti;i++)
+                if(p->pac[i].prioritate==max)
+                {
+                    for(j=i;j<p->nr_pacienti-1;j++)
+                        p->pac[j]=p->pac[j+1];
+                    p->nr_pacienti--;
+                    break;
+                }
+        }
+}
+void actualizare_pacient(char nume[],char clasa_noua[],int prioritate_noua)
+{
+    clasa *p;
+    pacient aux;
+    int i,j;
+    for(p=rad;p;p=p->urm)
+    {
+        for(i=0;i<p->nr_pacienti;i++)
+            if(strcmp(nume,p->pac[i].nume)==0)
+            {
+                aux=p->pac[i];
+                aux.prioritate=prioritate_noua;
+                for(j=i;j<p->nr_pacienti-1;j++)
+                    p->pac[j]=p->pac[j+1];
+                p->nr_pacienti--;
+            }
+    }
+    for(p=rad;p;p=p->urm)
+        if(strcmp(clasa_noua,p->nume)==0)
+        {
+            p->pac[p->nr_pacienti]=aux;
+            p->nr_pacienti++;
+        }
+}
+void listare()
+{
+    clasa *p;
+    int i;
+    for(p=rad;p;p=p->urm)
+    {
+        printf("\nClasa %s:\n",p->nume);
+        for(i=0;i<p->nr_pacienti;i++)
+            printf("Pacient %s cu prioritate %d\n",p->pac[i].nume,p->pac[i].prioritate);
+    }
+}
+int main()
+{
+    adauga_clasa("1");
+    adauga_clasa("intreg");
+    adauga_pacient("1","gigi",3);
+    adauga_pacient("1","dfbfv",5);
+    adauga_pacient("1","df bxd",1);
+    adauga_pacient("1","djrbg",2);
+    adauga_pacient("1","sth bs",6);
+    adauga_pacient("1","dhferdjneb",10);
+    adauga_pacient("1","gigel",9);
+    adauga_pacient("1","savncga",7);
+    adauga_pacient("intreg","marcel",3);
+    adauga_pacient("intreg","dfbfv",5);
+    adauga_pacient("intreg","df bxd",1);
+    adauga_pacient("intreg","djrbg",2);
+    adauga_pacient("intreg","sth bs",6);
+    adauga_pacient("intreg","dhferdjneb",10);
+    adauga_pacient("intreg","elena",9);
+    adauga_pacient("intreg","savncga",7);
+    adauga_pacient("intreg","dhbtdnf",20);
+    listare();
+    trateaza_pacient();
+    listare();
+    actualizare_pacient("gigel","intreg",15);
+    listare();
+    return 0;
+}

@@ -1,0 +1,28 @@
+/*Se citeste un numar natural n si apoi n cuvinte formate din cel mult 20 de litere fiecare. 
+Sa se afiseze cel mai lung cuvant care se poate forma cu doua cuvinte dintre cele citite.  */
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{char a[21],m1[21]="",m2[21]="";
+    int n, i;
+    printf("Dati nr de cuvinte: ");
+    scanf("%d", &n);
+    for(i=1;i<=n;i++)
+    {
+        scanf("%s", &a);
+        if(strlen(a)>strlen(m1))
+        {
+            strcpy(m2,m1);
+            strcpy(m1,a);
+        }
+        else if(strlen(a)>strlen(m2)) strcpy(m2,a);
+    }
+    printf("%s%s", m1, m2);
+    printf("\n");
+    printf("%s%s", m2, m1);
+    return 0;
+}
+

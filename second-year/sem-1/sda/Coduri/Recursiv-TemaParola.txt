@@ -1,0 +1,98 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+#define capacitate 100
+
+int N;
+char ALF[capacitate];
+char MUST[capacitate];
+char PASS[capacitate];
+
+char sir[capacitate];
+char sirParolaNoua[capacitate];
+int contorParoleGenerate;
+int pozCriptare;
+
+
+int verificareParola()
+{
+    int  i, j, ok;
+    int capMust = strlen(MUST);
+    int capSir = strlen(sir);
+
+    for (i = 0; i < capMust; i++)
+    {
+        ok = 0;
+
+        for (j = 0; j < capSir; j++)
+        {
+            if (sir[j] == MUST[i])
+                ok = 1;
+        }
+        if (ok != 1)
+            return 0;
+
+    }
+    return 1;
+}
+
+void backtracking(int pozCriptare)
+{
+    //int capPass = strlen(PASS);
+    //int capSir = strlen(sir);
+    
+    if ( ( strlen(PASS) == strlen(sir) ) && verificareParola() )
+        contorParoleGenerate++;
+    else
+    {
+
+        int capAlf = strlen(ALF);
+        int i;
+
+        for (i = 0; i < capAlf; i++)
+        {
+            if (pozCriptare < N)
+            {
+                sir[pozCriptare] = ALF[i];
+                sir[pozCriptare + 1] = 0;
+                backtracking(pozCriptare + 1);
+            }
+        }
+    }
+}
+
+void KryptKat(char sursa[50])
+{
+    char copieSursa[50];
+
+    if (N == pozCriptare)
+        sirParolaNoua[pozCriptare] = NULL;
+
+    else
+    {
+        int capSursa = strlen(sursa);
+        if (capSursa)
+        {
+            int mijloc = strlen(sursa) / 2;
+
+            sirParolaNoua[pozCriptare++] = sursa[mijloc];
+
+            strcpy(copieSursa, sursa + 1 + mijloc);
+
+            sursa[mijloc] = NULL;
+
+            KryptKat(sursa);
+            KryptKat(copieSursa);
+        }
+    }
+}
+
+int main()
+{
+    scanf("%d %s %s %s", &N, ALF, MUST, PASS);
+    backtracking(0);
+    KryptKat(PASS);
+    printf("%d\n%s", contorParoleGenerate, sirParolaNoua);
+
+}

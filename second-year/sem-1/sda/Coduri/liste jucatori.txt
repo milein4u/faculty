@@ -1,0 +1,333 @@
+/*
+Sa se scrie un program folosind liste simplu inlantuite pentru modelarea cat mai eficienta din punct de vedere
+al timpului de rulare a situatiei dintr-un campionat de fotbal in care 
+echipele pot fi adaugate sau retrase in orice moment iar
+jucatorii pot fi achizitionati , vanduti sau transferati in orice moment .
+Programul va putea efectua operatii asupra unui numar arbitrar de echipe si va trebui sa implementeze urmatorii operatori
+// initializeaza sistemul, nici o echipa
+void initializare(); 
+
+// adauga o noua echipa cu numele precizat
+void adaugare_echipa(char *nume) ;
+
+// elimina echipa cu numele precizat
+void eliminare_echipa(char *nume); 
+
+// adauga un nou jucator cu salar precizat intr-o echipa existenta
+// se va verifica faptul ca jucatorul nu exista in vreo alta echipa
+void adaugare_jucator(char *nume_jucator, char *nume_echipa, int salar);
+
+// elimina jucatorul dat prin numele sau de la echipa la care joaca
+void eliminare_jucator(char *nume);
+
+// transfera jucatorul dat prin numele sau de la o noua echipa
+void transfera_jucator(char *nume, char *nume_echipa_noua) ;
+
+// listeaza jucatorii din echipa precizata in ordinea descrescatoare a salariilor lor
+void listare(char *nume_echipa);
+
+*/
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+typedef struct Jucator
+{
+	char nume[30];
+	int salar ;
+	int angajat ;
+	Jucator* next ;
+}Jucator ;
+
+typedef struct Echipa
+{
+	char nume[30];
+	Jucator* prim;
+	Jucator* ultim;
+	Echipa* next;
+}Echipa ;
+
+typedef struct
+{
+	Echipa* prim;
+	Echipa *ultim;
+}Campionat;
+
+Campionat *campionat = (Campionat*) malloc(sizeof(Campionat));
+
+void initializare()
+{
+	campionat -> prim = NULL;
+	campionat -> ultim = NULL;
+}
+
+Echipa* creareEchipa(char *nume)
+{
+	Echipa *echipa = (Echipa*) malloc(sizeof(Echipa));
+	echipa->prim = NULL ;
+	echipa->ultim = NULL ;
+	strcpy(echipa->nume, nume);
+
+	return echipa ;
+}
+
+void adaugare_echipa(Echipa *echipa)
+{
+
+	if(campionat->prim == NULL)
+	{
+		campionat -> prim = echipa ;
+		campionat -> ultim = echipa ;
+		echipa ->next = NULL ;
+	}
+	else
+	{
+		echipa->next = campionat->prim;
+		campionat->prim = echipa ;
+	}
+}
+
+void eliminare_echipa(Echipa *echipa)
+{
+	Echipa *i,*j ;
+
+	for(i=campionat -> prim; i!=campionat->ultim; j=i, i = i->next)
+	{
+		if(!strcmp(i->nume, echipa->nume))
+		{
+			j->next = i->next;
+		}
+	}
+}
+
+void listareCampionat()
+{
+	printf("\n");
+	Echipa *i ;
+
+	for( i = campionat -> prim; i != NULL; i=i->next)
+		printf("\n%s", i->nume);
+
+}
+
+void adaugare_jucator(Jucator *jucator, Echipa *nume_echipa, int salar)
+{
+	int liber = 1 ;
+
+	Echipa* e = campionat->prim;
+	Echipa* f ;
+
+	while(e != NULL )
+	{
+		Jucator *j = e->prim ;
+		
+		if(!strcmp(e->nume, nume_echipa->nume))
+			f=e;
+
+		while( j != NULL) 
+		{
+			if( !strcmp(j->nume, jucator->nume) )
+			{
+				liber = 0 ;
+				break;
+			}
+			j=j->next;
+		}
+		e=e->next;
+	}
+
+	if(liber)
+	{
+		
+		if(f->prim == NULL )
+		{
+			f->prim = jucator;
+			f->ultim = jucator;
+			f->prim->next = NULL ;
+			jucator->salar = salar;
+			jucator->angajat = 1;
+		}
+		else
+		{
+			Jucator *j ,*prev;
+			for(j=f->prim, prev=j; j->salar > salar && j!= NULL; prev = j, j=j->next);
+			
+			if(prev==j)
+			{
+				jucator->next = f->prim ;
+				f->prim = jucator;
+				jucator->salar = salar;
+				jucator->angajat = 1;
+			}
+			else
+			{
+				jucator->next = j;
+				prev->next = jucator ;
+				jucator->salar = salar;
+				jucator->angajat = 1;
+			}
+			
+		}
+	}
+	else
+		printf("\ocupat");
+}
+
+Jucator* creareJucator(char *nume)
+{
+	Jucator *jucator;
+	jucator = (Jucator*)malloc(sizeof(Jucator));
+	strcpy(jucator->nume, nume);
+	jucator -> angajat = 0 ;
+	jucator ->next = NULL ;
+	return jucator;
+}
+
+void eliminare_jucator(char *nume)
+{
+	Echipa* e = campionat->prim;
+	Echipa* f ;
+	int gasit = 0;
+
+	while(e != NULL )
+	{
+		Jucator *j = e->prim ;
+
+		while( j != NULL) 
+		{
+			if( !strcmp(j->nume, nume) )
+			{
+				f=e ;
+				gasit =1 ;
+				break;
+			}
+			j=j->next;
+		}
+		e=e->next;
+	}
+
+	if(gasit)
+	{
+		Jucator *j, *prev;
+		for(j=f->prim, prev=j; strcmp(j->nume,nume) && j!=NULL; prev = j, j=j->next);
+		
+		if(prev!=j)
+		{
+			prev->next = j->next ;
+			free(j);
+		}
+		else
+		{
+			j=f->prim;
+			f->prim=f->prim->next;
+			free(j);
+		}
+	}
+	else
+	{
+		printf("\nJucator Inexistent!\n");
+	}
+}
+
+Jucator* eliminareJucator(char *nume)
+{
+	Echipa* e = campionat->prim;
+	Echipa* f ;
+	int gasit = 0;
+
+	while(e != NULL )
+	{
+		Jucator *j = e->prim ;
+
+		while( j != NULL) 
+		{
+			if( !strcmp(j->nume, nume) )
+			{
+				f=e ;
+				gasit =1 ;
+				break;
+			}
+			j=j->next;
+		}
+		e=e->next;
+	}
+
+	if(gasit)
+	{
+		Jucator *j, *prev;
+		for(j=f->prim, prev=j; strcmp(j->nume,nume) && j!=NULL; prev = j, j=j->next);
+		
+		if(prev!=j)
+		{
+			prev->next = j->next ;
+			return j ;
+		}
+		else
+		{
+			j=f->prim;
+			f->prim=f->prim->next;
+			return j ;
+		}
+	}
+	else
+	{
+		printf("\nJucator Inexistent!\n");
+		return NULL ;
+	}
+}
+// transfera jucatorul dat prin numele sau de la o noua echipa
+void transfera_jucator(char *nume, Echipa *nume_echipa_noua)
+{
+	Jucator *j = eliminareJucator(nume);
+	adaugare_jucator(j, nume_echipa_noua, j->salar);
+}
+
+// listeaza jucatorii din echipa precizata in ordinea descrescatoare a salariilor lor
+void listare(Echipa *echipa)
+{
+	printf("\n\n%s", echipa->nume);
+	Jucator *i;
+	for(i=echipa->prim; i!=NULL; i=i->next)
+		printf("\n%s %d", i->nume, i->salar);
+}
+
+
+int main()
+{
+	initializare();
+	//echipe
+	Echipa *Steaua = creareEchipa("Steaua");
+	Echipa *Dinamo = creareEchipa("Dinamo");
+	Echipa *Rapid =  creareEchipa("Rapid");
+	
+	adaugare_echipa(Steaua);
+	adaugare_echipa(Dinamo);
+	adaugare_echipa(Rapid);
+
+	Jucator *j1 = creareJucator("Ion");
+	Jucator *j2 = creareJucator("Vasile");
+	Jucator *j3 = creareJucator("Petru");
+
+	adaugare_jucator(j1,Steaua,100);
+	adaugare_jucator(j2,Steaua,200);
+	adaugare_jucator(j3,Steaua,150);
+	
+	adaugare_jucator(j1,Dinamo,100);
+	listare(Steaua);
+	
+	//eliminare_jucator("Petru");
+	transfera_jucator("Petru",Dinamo);
+	listare(Steaua);
+	listare(Dinamo);
+
+	//listareCampionat();
+
+	//eliminare_echipa(Dinamo);
+
+	//listareCampionat();
+	
+	printf("\n\n");
+	system("pause");
+	return 0;
+}
